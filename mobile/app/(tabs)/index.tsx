@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   const events = [
     { date: '2025-04-14', day: 'Poniedziałek', numberOfEvents: 3 },
     { date: '2025-04-15', day: 'Wtorek', numberOfEvents: 2 },
-    { date: '2025-04-16', day: 'Środa', numberOfEvents: 4 },
+    { date: '2025-04-16', day: 'Środa', numberOfEvents: 4 },
     { date: '2025-04-17', day: 'Czwartek', numberOfEvents: 2 },
-    { date: '2025-04-18', day: 'Piątek', numberOfEvents: 5 },
+    { date: '2025-04-18', day: 'Piątek', numberOfEvents: 5 },
+    { date: '2025-04-18', day: 'Sobota', numberOfEvents: 3 },
+    { date: '2025-04-18', day: 'Niedziela', numberOfEvents: 0 },
   ];
 
   return (
@@ -15,9 +17,18 @@ export default function HomeScreen() {
 
       {events.map((event, index) => (
         <View key={index} style={styles.card}>
-          <Text style={styles.date}>{event.date}</Text>
-          <Text style={styles.day}>{event.day}</Text>
-          <Text style={styles.count}>{event.numberOfEvents} wizyty</Text>
+          <View style={styles.row}>
+            <View style={styles.leftContent}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>{event.day[0]}</Text>
+              </View>
+              <View style={styles.textContent}>
+                <Text style={styles.day}>{event.day}</Text>
+                <Text style={styles.count}>{event.numberOfEvents} wizyty</Text>
+              </View>
+            </View>
+            <Text style={styles.date}>{event.date}</Text>
+          </View>
         </View>
       ))}
     </ScrollView>
@@ -29,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 24,
     backgroundColor: '#f8f9fa',
-    minHeight: '100%'
+    minHeight: '100%',
   },
   header: {
     fontSize: 22,
@@ -46,21 +57,47 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    cursor: 'pointer',
   },
-  date: {
-    fontSize: 16,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  leftContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#007AFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    color: '#fff',
     fontWeight: 'bold',
+    fontSize: 18,
+  },
+  textContent: {
+    justifyContent: 'center',
   },
   day: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#111',
   },
   count: {
-    marginTop: 8,
     fontSize: 14,
     fontWeight: '500',
     color: '#007AFF',
+    marginTop: 2,
+  },
+  date: {
+    fontSize: 14,
+    color: '#555',
+    fontWeight: '500',
   },
 });
