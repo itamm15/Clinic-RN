@@ -10,8 +10,8 @@ export default function HomeScreen() {
     { date: '2025-04-16', day: 'Środa', numberOfEvents: 4 },
     { date: '2025-04-17', day: 'Czwartek', numberOfEvents: 2 },
     { date: '2025-04-18', day: 'Piątek', numberOfEvents: 5 },
-    { date: '2025-04-18', day: 'Sobota', numberOfEvents: 3 },
-    { date: '2025-04-18', day: 'Niedziela', numberOfEvents: 0 },
+    { date: '2025-04-19', day: 'Sobota', numberOfEvents: 3 },
+    { date: '2025-04-20', day: 'Niedziela', numberOfEvents: 0 },
   ];
 
   return (
