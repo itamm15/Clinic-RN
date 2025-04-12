@@ -64,6 +64,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="allEvents"
+        options={{
+          title: 'Wizyty',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="calendar" size={28} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
         name="events"
         options={{
           href: null
