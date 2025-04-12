@@ -64,7 +64,7 @@ export default function DoctorsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Nasi lekarze</Text>
+      <Text style={styles.header}>Lekarze</Text>
       {DOCTORS.map((doctor) => (
         <View key={doctor.id} style={styles.card}>
           <View style={styles.iconWrapper}>{doctor.icon}</View>
