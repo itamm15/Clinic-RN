@@ -1,3 +1,4 @@
+import React from "react";
 import { APPOINTMENTS } from "@/constants/Appointments";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
