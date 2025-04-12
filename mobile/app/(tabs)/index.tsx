@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   const events = [
     { date: '2025-04-14', day: 'Poniedziałek', numberOfEvents: 3 },
     { date: '2025-04-15', day: 'Wtorek', numberOfEvents: 2 },
@@ -16,27 +19,29 @@ export default function HomeScreen() {
       <Text style={styles.header}>Wydarzenia</Text>
 
       {events.map((event, index) => (
-        <View key={index} style={styles.card}>
-          <View style={styles.row}>
-            <View style={styles.leftContent}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{event.day[0]}</Text>
-              </View>
-              <View style={styles.textContent}>
-                <Text style={styles.day}>{event.day}</Text>
+        <TouchableOpacity onPress={() => router.push(`/events?date=${event.date}&day=${event.day}`)}>
+          <View key={index} style={styles.card}>
+            <View style={styles.row}>
+              <View style={styles.leftContent}>
+                <View style={styles.avatar}>
+                  <Text style={styles.avatarText}>{event.day[0]}</Text>
+                </View>
+                <View style={styles.textContent}>
+                  <Text style={styles.day}>{event.day}</Text>
 
-                <Text style={styles.count}>{numberOfVisits(event.numberOfEvents)}</Text>
+                  <Text style={styles.count}>{numberOfVisits(event.numberOfEvents)}</Text>
+                </View>
               </View>
+              <Text style={styles.date}>{event.date}</Text>
             </View>
-            <Text style={styles.date}>{event.date}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
 
   function numberOfVisits(numberOfEvents: number) {
-   return numberOfEvents === 0 ? "Brak wizyt" : numberOfEvents + " wizyt";
+   return numberOfEvents === 0 ? "Brak wizyt" : numberOfEvents + " wizyty";
   }
 }
 

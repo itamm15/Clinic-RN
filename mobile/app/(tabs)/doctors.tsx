@@ -84,6 +84,7 @@ export default function DoctorsScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    paddingTop: 24,
     backgroundColor: '#f8f9fa',
     minHeight: '100%',
   },

@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+import { Image } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -29,7 +30,20 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack screenOptions={{
+        headerStyle: {
+          backgroundColor: "#f8f9fa",
+        },
+        headerTitleStyle: {
+          color: "black",
+        },
+        headerRight: () => (
+          <Image
+            source={require('@/assets/images/clinic-icon.png')}
+            style={{ width: 32, height: 32, borderRadius: 16, marginRight: 16 }}
+          />
+        ),
+      }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
