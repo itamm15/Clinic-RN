@@ -24,7 +24,8 @@ export default function HomeScreen() {
               </View>
               <View style={styles.textContent}>
                 <Text style={styles.day}>{event.day}</Text>
-                <Text style={styles.count}>{event.numberOfEvents} wizyty</Text>
+
+                <Text style={styles.count}>{numberOfVisits(event.numberOfEvents)}</Text>
               </View>
             </View>
             <Text style={styles.date}>{event.date}</Text>
@@ -33,6 +34,10 @@ export default function HomeScreen() {
       ))}
     </ScrollView>
   );
+
+  function numberOfVisits(numberOfEvents: number) {
+   return numberOfEvents === 0 ? "Brak wizyt" : numberOfEvents + " wizyt";
+  }
 }
 
 const styles = StyleSheet.create({
