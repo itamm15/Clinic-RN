@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
+    minHeight: 100,
   },
   iconWrapper: {
     width: 54,
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   person: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 4
   },
   title: {
     fontSize: 14,
