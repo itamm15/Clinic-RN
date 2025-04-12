@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Fab } from '@/components/Fab';
 
 type Doctor = {
   id: number;
@@ -76,6 +77,8 @@ export default function DoctorsScreen() {
           </View>
         </View>
       ))}
+
+    <Fab />
     </ScrollView>
   );
 }
