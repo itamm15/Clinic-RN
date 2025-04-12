@@ -32,7 +32,7 @@ export default function EventsScreen() {
           const doctor = DOCTORS.find((doc) => doc.id === appointment.doctorId);
 
           return (
-            <TouchableOpacity onPress={() => router.push(`/event?id=${appointment.id}`)}>
+            <TouchableOpacity onPress={() => router.push(`/events/event?id=${appointment.id}`)}>
               <View key={appointment.id} style={styles.card}>
                 <Text style={styles.time}>{appointment.time}</Text>
                 <Text style={styles.patient}>{appointment.patient}</Text>
