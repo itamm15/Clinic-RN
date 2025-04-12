@@ -71,7 +71,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="event"
+        name="event/index"
         options={{
           href: null
         }}

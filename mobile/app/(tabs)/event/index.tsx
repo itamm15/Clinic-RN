@@ -1,6 +1,6 @@
 import React from "react";
 import { APPOINTMENTS } from "@/constants/Appointments";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -14,7 +14,8 @@ const DOCTORS = [
 ];
 
 export default function EventScreen() {
-  const { id } = useLocalSearchParams();
+  const { id, day } = useLocalSearchParams();
+  const router = useRouter();
   const navigation = useNavigation();
 
   const appointment = APPOINTMENTS.find((appointment) => appointment.id === Number(id));
@@ -25,6 +26,11 @@ export default function EventScreen() {
   useEffect(() => {
     navigation.setOptions({
       title: `Informacje o wizycie nr. ${appointment.id}`,
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => router.push(`/events?date=${appointment.date}&day=${day}`)} style={{ paddingLeft: 16 }}>
+          <Text style={{ fontSize: 22, color: 'black', marginRight: 8 }}>←</Text>
+        </TouchableOpacity>
+      ),
     });
   })
 
