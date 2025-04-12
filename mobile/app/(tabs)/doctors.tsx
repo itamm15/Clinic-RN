@@ -64,7 +64,6 @@ export default function DoctorsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Lekarze</Text>
       {DOCTORS.map((doctor) => (
         <View key={doctor.id} style={styles.card}>
           <View style={styles.iconWrapper}>{doctor.icon}</View>
@@ -87,12 +86,6 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     backgroundColor: '#f8f9fa',
     minHeight: '100%',
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
   },
   card: {
     flexDirection: 'row',
