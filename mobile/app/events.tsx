@@ -25,18 +25,22 @@ export default function EventsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {appointmentsPerDay.map((appointment) => {
-        const doctor = DOCTORS.find((doc) => doc.id === appointment.doctorId);
+      {appointmentsPerDay.length > 0 ? (
+        appointmentsPerDay.map((appointment) => {
+          const doctor = DOCTORS.find((doc) => doc.id === appointment.doctorId);
 
-        return (
-          <View key={appointment.id} style={styles.card}>
-            <Text style={styles.time}>{appointment.time}</Text>
-            <Text style={styles.patient}>{appointment.patient}</Text>
-            <Text style={styles.reason}>{appointment.reason}</Text>
-            {doctor && <Text style={styles.doctor}>{doctor.person} – {doctor.title}</Text>}
-          </View>
-        );
-      })}
+          return (
+            <View key={appointment.id} style={styles.card}>
+              <Text style={styles.time}>{appointment.time}</Text>
+              <Text style={styles.patient}>{appointment.patient}</Text>
+              <Text style={styles.reason}>{appointment.reason}</Text>
+              {doctor && <Text style={styles.doctor}>{doctor.person} – {doctor.title}</Text>}
+            </View>
+          );
+        })
+      ) : (
+        <Text style={styles.noAppointments}>Brak wizyt w tym dniu.</Text>
+      )}
     </ScrollView>
   );
 }
@@ -77,6 +81,13 @@ const styles = StyleSheet.create({
   doctor: {
     fontSize: 13,
     color: '#007AFF',
+  },
+  noAppointments: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 24,
   },
 });
 
