@@ -54,6 +54,20 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="doctor" size={28} color={color} />,
         }}
       />
+
+      <Tabs.Screen
+        name="events"
+        options={{
+          href: null
+        }}
+      />
+
+      <Tabs.Screen
+        name="event"
+        options={{
+          href: null
+        }}
+      />
     </Tabs>
   );
 }

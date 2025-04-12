@@ -19,7 +19,7 @@ export default function HomeScreen() {
       <Text style={styles.header}>Wydarzenia</Text>
 
       {events.map((event, index) => (
-        <TouchableOpacity onPress={() => router.push(`/events/events?date=${event.date}&day=${event.day}`)}>
+        <TouchableOpacity onPress={() => router.push(`/events?date=${event.date}&day=${event.day}`)}>
           <View key={index} style={styles.card}>
             <View style={styles.row}>
               <View style={styles.leftContent}>
