@@ -12,9 +12,9 @@ public class Doctor
     [StringLength(50, ErrorMessage = "Nazwisko nie może być dłuższe niż 50 znaków")]
     public string LastName { get; set; }
 
-    [Required(ErrorMessage = "Specjalizacja jest wymagana")]
-    [StringLength(100, ErrorMessage = "Specjalizacja nie może być dłuższa niż 100 znaków")]
-    public string Specialization { get; set; }
+    [Required]
+    public int SpecializationId { get; set; }
+    public Specialization Specialization { get; set; }
 
     [Required(ErrorMessage = "Email jest wymagany")]
     [EmailAddress(ErrorMessage = "Niepoprawny format adresu e-mail")]
