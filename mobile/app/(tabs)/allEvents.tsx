@@ -1,15 +1,5 @@
-import { APPOINTMENTS } from "@/constants/Appointments";
 import { useGetVisits } from "@/hooks/visit/useGetVisits";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-
-const DOCTORS = [
-  { id: 1, person: 'Dr. Krzysztof Zjadek', title: 'Kardiolog' },
-  { id: 2, person: 'Dr. Karina Wojska', title: 'Neurolog' },
-  { id: 3, person: 'Dr. Karol Poss', title: 'Ortopeda' },
-  { id: 4, person: 'Dr. Karol Wojteka', title: 'Stomatolog' },
-  { id: 5, person: 'Dr. Magdalena Kowalska', title: 'Diabetolog' },
-  { id: 6, person: 'Dr. Szymon Szczepała', title: 'Pediatra' },
-];
 
 export default function AllEventsScreen() {
   const { visits, loading } = useGetVisits();
