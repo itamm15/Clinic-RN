@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fab } from '@/components/Fab';
+import { useGetDoctors } from '@/hooks/doctor/useGetDoctors';
 
 type Doctor = {
   id: number;
@@ -12,67 +13,26 @@ type Doctor = {
 };
 
 export default function DoctorsScreen() {
-  const DOCTORS: Doctor[] = [
-    {
-      id: 1,
-      person: 'Dr. Krzysztof Zjadek',
-      title: 'Kardiolog',
-      days: 'Poniedziałek - Piątek',
-      time: '8:00 - 16:00',
-      icon: <FontAwesome5 name="heartbeat" size={32} color="#fff" />,
-    },
-    {
-      id: 2,
-      person: 'Dr. Karina Wojska',
-      title: 'Neurolog',
-      days: 'Poniedziałek - Czwartek',
-      time: '8:00 - 12:00',
-      icon: <FontAwesome5 name="brain" size={32} color="#fff" />,
-    },
-    {
-      id: 3,
-      person: 'Dr. Karol Poss',
-      title: 'Ortopeda',
-      days: 'Wtorek - Piątek',
-      time: '12:00 - 19:00',
-      icon: <MaterialCommunityIcons name="bone" size={32} color="#fff" />,
-    },
-    {
-      id: 4,
-      person: 'Dr. Karol Wojteka',
-      title: 'Stomatolog',
-      days: 'Poniedziałek - Piątek',
-      time: '9:30 - 15:00',
-      icon: <FontAwesome5 name="tooth" size={32} color="#fff" />,
-    },
-    {
-      id: 5,
-      person: 'Dr. Magdalena Kowalska',
-      title: 'Diabetolog',
-      days: 'Środa - Piątek',
-      time: '8:30 - 19:00',
-      icon: <FontAwesome5 name="notes-medical" size={32} color="#fff" />,
-    },
-    {
-      id: 6,
-      person: 'Dr. Szymon Szczepała',
-      title: 'Pediatra',
-      days: 'Czwartek - Piątek',
-      time: '8:00 - 19:00',
-      icon: <FontAwesome5 name="user-md" size={32} color="#fff" />,
-    },
-  ];
+  const { doctors, loading } = useGetDoctors();
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Pobieram dane...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {DOCTORS.map((doctor) => (
+      {doctors.map((doctor) => (
         <View key={doctor.id} style={styles.card}>
-          <View style={styles.iconWrapper}>{doctor.icon}</View>
+          <View style={styles.iconWrapper}>{specIcon[doctor.specialization.name as keyof typeof specIcon]}</View>
           <View style={styles.info}>
-            <Text style={styles.person}>{doctor.person}</Text>
-            <Text style={styles.title}>{doctor.title}</Text>
+            <Text style={styles.person}>Dr. {doctor.name} {doctor.lastName}</Text>
+            <Text style={styles.title}>{doctor.specialization.name}</Text>
             <Text style={styles.availability}>
-              {doctor.days} | {doctor.time}
+              Kontakt: {doctor.email}
             </Text>
           </View>
         </View>
@@ -81,6 +41,15 @@ export default function DoctorsScreen() {
     <Fab />
     </ScrollView>
   );
+}
+
+const specIcon = {
+  'Kardiolog': <FontAwesome5 name="heartbeat" size={32} color="#fff" />,
+  'Neurolog': <FontAwesome5 name="brain" size={32} color="#fff" />,
+  'Ortopeda': <MaterialCommunityIcons name="bone" size={32} color="#fff" />,
+  'Stomatolog': <FontAwesome5 name="tooth" size={32} color="#fff" />,
+  'Diabetolog': <FontAwesome5 name="notes-medical" size={32} color="#fff" />,
+  'Pediatra': <FontAwesome5 name="user-md" size={32} color="#fff" />,
 }
 
 const styles = StyleSheet.create({
