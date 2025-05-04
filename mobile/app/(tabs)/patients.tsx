@@ -5,6 +5,14 @@ import { useGetPatients } from '@/hooks/patient/useGetPatients';
 export default function PatientsScreen() {
   const { patients, loading } = useGetPatients();
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Pobieram dane...</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {patients.map((patient, index) => (
