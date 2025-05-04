@@ -1,13 +1,9 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { APPOINTMENTS } from '@/constants/Appointments';
+import { useGetPatients } from '@/hooks/patient/useGetPatients';
 
 export default function PatientsScreen() {
-  const patients = Array.from(
-    new Map(
-      APPOINTMENTS.map((a) => [a.patient, { name: a.patient, lastVisit: a.date }])
-    ).values()
-  );
+  const { patients, loading } = useGetPatients();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -17,8 +13,9 @@ export default function PatientsScreen() {
             <FontAwesome5 name="user" size={24} color="#fff" />
           </View>
           <View style={styles.info}>
-            <Text style={styles.name}>{patient.name}</Text>
-            <Text style={styles.reason}>Ostatnia wizyta: {patient.lastVisit}</Text>
+            <Text style={styles.name}>{patient.firstName} {patient.lastName}</Text>
+            <Text style={styles.reason}>Kontakt: {patient.phoneNumber}</Text>
+            <Text style={styles.reason}>Email: {patient.email}</Text>
           </View>
         </View>
       ))}
