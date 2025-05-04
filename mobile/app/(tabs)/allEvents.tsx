@@ -1,4 +1,5 @@
 import { APPOINTMENTS } from "@/constants/Appointments";
+import { useGetVisits } from "@/hooks/visit/useGetVisits";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const DOCTORS = [
@@ -11,17 +12,25 @@ const DOCTORS = [
 ];
 
 export default function AllEventsScreen() {
+  const { visits, loading } = useGetVisits();
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Pobieram dane...</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {APPOINTMENTS.map((appointment) => {
-        const doctor = DOCTORS.find((doc) => doc.id === appointment.doctorId);
-
+      {visits.map((appointment) => {
         return (
           <View key={appointment.id} style={styles.card}>
-            <Text style={styles.time}>{appointment.time}</Text>
-            <Text style={styles.patient}>{appointment.patient}</Text>
-            <Text style={styles.reason}>{appointment.reason}</Text>
-            {doctor && <Text style={styles.doctor}>{doctor.person} – {doctor.title}</Text>}
+            <Text style={styles.time}>{appointment.visitDate.toString()}</Text>
+            <Text style={styles.patient}>{appointment.patientFullName}</Text>
+            <Text style={styles.reason}>{appointment.visitReason}</Text>
+            {<Text style={styles.doctor}>{appointment.doctorFullName} – {appointment.doctorSpecialization}</Text>}
           </View>
         );
       })}

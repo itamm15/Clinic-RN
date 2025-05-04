@@ -15,8 +15,17 @@ public class VisitController : Controller
 
   // routes
   [HttpGet]
-  public async Task<ActionResult<IEnumerable<Visit>>> GetVisits()
+  public async Task<ActionResult<IEnumerable<VisitDto>>> GetVisits()
   {
-    return await _context.Visits.ToListAsync();
+    return await _context.Visits.Select(v => new VisitDto
+    {
+      Id = v.Id,
+      VisitDate = v.VisitDate,
+      VisitReason = v.VisitReason,
+      PatientFullName = v.Patient.FirstName + " " + v.Patient.LastName,
+      DoctorFullName = v.Doctor.Name + " " + v.Doctor.LastName,
+      DoctorSpecialization = v.Doctor.Specialization.Name
+    })
+    .ToListAsync();
   }
 }
