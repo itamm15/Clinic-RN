@@ -17,6 +17,6 @@ public class DoctorController : Controller
   [HttpGet]
   public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
   {
-    return await _context.Doctors.ToListAsync();
+    return await _context.Doctors.Include(d => d.Specialization).ToListAsync();
   }
 }

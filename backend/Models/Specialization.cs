@@ -8,6 +8,4 @@ public class Specialization
     [Required]
     [StringLength(100)]
     public string Name { get; set; }
-
-    public List<Doctor> Doctors { get; set; }
 }
