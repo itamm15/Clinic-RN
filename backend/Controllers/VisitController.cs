@@ -60,10 +60,11 @@ public class VisitController : Controller
   [HttpGet("daily-summary")]
   public async Task<ActionResult<IEnumerable<VisitDto>>> GetDailySummary([FromQuery] string date)
   {
-    var requestedDate = DateTime.Parse(date);
+    var requestedDate = DateTime.SpecifyKind(DateTime.Parse(date), DateTimeKind.Utc);
+    var nextDay = requestedDate.AddDays(1);
 
-    return await _context.Visits.
-                Where(v => v.VisitDate.Date == requestedDate.Date)
+    var res = await _context.Visits.
+                Where(v => v.VisitDate >= requestedDate && v.VisitDate < nextDay)
                 .Include(v => v.Doctor)
                 .Include(v => v.Patient)
                 .Select(v => new VisitDto
@@ -76,7 +77,12 @@ public class VisitController : Controller
                   DoctorSpecialization = v.Doctor.Specialization.Name
                 })
                 .ToListAsync();
+
+    Console.WriteLine(res);
+
+    return res;
   }
+
   // HELPERS
 
   private string GetDayName(DayOfWeek dayOfWeek)

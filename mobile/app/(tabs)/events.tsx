@@ -1,4 +1,5 @@
 import { APPOINTMENTS } from '@/constants/Appointments';
+import { useGetVisitsDailySummary } from '@/hooks/visit/useGetVisitsDailySummary';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
@@ -14,6 +15,8 @@ const DOCTORS = [
 
 export default function EventsScreen() {
   const { date, day } = useLocalSearchParams();
+  const formattedDate = new Date(date as string).toISOString().slice(0, 10);
+  const { visitsDailySummary, loading } = useGetVisitsDailySummary(formattedDate);
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -23,21 +26,19 @@ export default function EventsScreen() {
     });
   }, [day, date]);
 
-  const appointmentsPerDay = APPOINTMENTS.filter((appointment) => appointment.date === date);
+  if (loading) return <Text>Loading...</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {appointmentsPerDay.length > 0 ? (
-        appointmentsPerDay.map((appointment) => {
-          const doctor = DOCTORS.find((doc) => doc.id === appointment.doctorId);
-
+      {visitsDailySummary.length > 0 ? (
+        visitsDailySummary.map((appointment) => {
           return (
             <TouchableOpacity onPress={() => router.push(`/event?id=${appointment.id}&day=${day}`)}>
               <View key={appointment.id} style={styles.card}>
-                <Text style={styles.time}>{appointment.time}</Text>
-                <Text style={styles.patient}>{appointment.patient}</Text>
-                <Text style={styles.reason}>{appointment.reason}</Text>
-                {doctor && <Text style={styles.doctor}>{doctor.person} – {doctor.title}</Text>}
+                <Text style={styles.time}>{appointment.visitDate.toString()}</Text>
+                <Text style={styles.patient}>{appointment.patientFullName}</Text>
+                <Text style={styles.reason}>{appointment.visitReason}</Text>
+                <Text style={styles.doctor}>{appointment.doctorFullName} – {appointment.doctorSpecialization}</Text>
               </View>
             </TouchableOpacity>
           );
