@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Fab } from '@/components/Fab';
 import { useGetDoctors } from '@/hooks/doctor/useGetDoctors';
 
 type Doctor = {
@@ -38,7 +37,6 @@ export default function DoctorsScreen() {
         </View>
       ))}
 
-    <Fab />
     </ScrollView>
   );
 }
