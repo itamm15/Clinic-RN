@@ -28,4 +28,51 @@ public class VisitController : Controller
     })
     .ToListAsync();
   }
+
+  [HttpGet("weekly-summary")]
+  public async Task<ActionResult<IEnumerable<VisitSummaryDto>>> GetWeeklySummary()
+  {
+    // period
+    var today = DateTime.Today;
+    var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+    var endOfWeek = startOfWeek.AddDays(6);
+
+    // vistis
+    var visits = await _context.Visits.Where(v => v.VisitDate >= startOfWeek && v.VisitDate <= endOfWeek).ToListAsync();
+
+    return Enumerable.Range(0, 7).Select(index =>
+    {
+      var date = startOfWeek.AddDays(index);
+      var count = visits.Count(v => v.VisitDate.Date == date.Date);
+
+      return new VisitSummaryDto
+      {
+        VisitDate = date.ToString("yyyy-MM-dd"),
+        VisitCount = count,
+        Day = GetDayName(date.DayOfWeek)
+      };
+    }).ToList();
+  }
+
+  // HELPERS
+
+  private string GetDayName(DayOfWeek dayOfWeek)
+  {
+    return dayOfWeek switch
+    {
+      DayOfWeek.Monday => "Poniedziałek",
+      DayOfWeek.Tuesday => "Wtorek",
+      DayOfWeek.Wednesday => "Środa",
+      DayOfWeek.Thursday => "Czwartek",
+      DayOfWeek.Friday => "Piątek",
+      DayOfWeek.Saturday => "Sobota",
+      DayOfWeek.Sunday => "Niedziela",
+    };
+  }
+}
+
+public class VisitSummaryDto {
+    public string VisitDate { get; set; }
+    public string Day { get; set; }
+    public int VisitCount { get; set; }
 }
