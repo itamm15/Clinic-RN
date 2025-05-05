@@ -34,8 +34,11 @@ public class VisitController : Controller
   {
     // period
     var today = DateTime.Today;
-    var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-    var endOfWeek = startOfWeek.AddDays(6);
+    var startOfWeek = DateTime.SpecifyKind(
+        today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday),
+        DateTimeKind.Utc
+    );
+    var endOfWeek = DateTime.SpecifyKind(startOfWeek.AddDays(6), DateTimeKind.Utc);
 
     // vistis
     var visits = await _context.Visits.Where(v => v.VisitDate >= startOfWeek && v.VisitDate <= endOfWeek).ToListAsync();
