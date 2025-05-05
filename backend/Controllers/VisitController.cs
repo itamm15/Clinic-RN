@@ -57,6 +57,26 @@ public class VisitController : Controller
     }).ToList();
   }
 
+  [HttpGet("daily-summary")]
+  public async Task<ActionResult<IEnumerable<VisitDto>>> GetDailySummary([FromQuery] string date)
+  {
+    var requestedDate = DateTime.Parse(date);
+
+    return await _context.Visits.
+                Where(v => v.VisitDate.Date == requestedDate.Date)
+                .Include(v => v.Doctor)
+                .Include(v => v.Patient)
+                .Select(v => new VisitDto
+                {
+                  Id = v.Id,
+                  VisitDate = v.VisitDate,
+                  VisitReason = v.VisitReason,
+                  PatientFullName = v.Patient.FirstName + " " + v.Patient.LastName,
+                  DoctorFullName = v.Doctor.Name + " " + v.Doctor.LastName,
+                  DoctorSpecialization = v.Doctor.Specialization.Name
+                })
+                .ToListAsync();
+  }
   // HELPERS
 
   private string GetDayName(DayOfWeek dayOfWeek)
