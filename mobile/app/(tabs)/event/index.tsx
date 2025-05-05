@@ -3,6 +3,7 @@ import { APPOINTMENTS } from "@/constants/Appointments";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useGetVisit } from "@/hooks/visit/useGetVisit";
 
 const DOCTORS = [
   { id: 1, person: 'Dr. Krzysztof Zjadek', title: 'Kardiolog' },
@@ -15,49 +16,50 @@ const DOCTORS = [
 
 export default function EventScreen() {
   const { id, day } = useLocalSearchParams();
+  const { visit, loading } = useGetVisit(parseInt(id as string));
+  const time = new Date().toTimeString().slice(0, 5);
+
   const router = useRouter();
   const navigation = useNavigation();
 
-  const appointment = APPOINTMENTS.find((appointment) => appointment.id === Number(id));
-  const doctor = DOCTORS.find((d) => d.id === appointment?.doctorId);
-
-  if (!appointment) return;
-
   useEffect(() => {
+    if (!visit) return;
+
     navigation.setOptions({
-      title: `Informacje o wizycie nr. ${appointment.id}`,
+      title: `Informacje o wizycie nr. ${visit.id}`,
       headerLeft: () => (
-        <TouchableOpacity onPress={() => router.push(`/events?date=${appointment.date}&day=${day}`)} style={{ paddingLeft: 16 }}>
+        <TouchableOpacity onPress={() => router.push(`/events?date=${visit.visitDate}&day=${day}`)} style={{ paddingLeft: 16 }}>
           <Text style={{ fontSize: 22, color: 'black', marginRight: 8 }}>←</Text>
         </TouchableOpacity>
       ),
     });
-  })
+  }, [visit])
+
+  if (!visit) return <Text>Wizyta nie znaleziona</Text>;
+  if (loading) return <Text>Loading...</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>Data wizyty</Text>
-      <TextInput style={styles.input} defaultValue={appointment.date} editable={false} />
+      <TextInput style={styles.input} defaultValue={visit.visitDate.toString()} editable={false} />
 
       <Text style={styles.label}>Godzina</Text>
-      <TextInput style={styles.input} defaultValue={appointment.time} />
+      <TextInput style={styles.input} defaultValue={time} />
 
       <Text style={styles.label}>Pacjent</Text>
-      <TextInput style={styles.input} defaultValue={appointment.patient} />
+      <TextInput style={styles.input} defaultValue={visit.patientFullName} />
 
       <Text style={styles.label}>Powód wizyty</Text>
       <TextInput
         style={[styles.input, styles.multiline]}
-        defaultValue={appointment.reason}
+        defaultValue={visit.visitReason}
         multiline
       />
 
-      {doctor && (
-        <>
-          <Text style={styles.label}>Lekarz</Text>
-          <TextInput style={styles.input} defaultValue={`${doctor.person} – ${doctor.title}`} />
-        </>
-      )}
+      <>
+        <Text style={styles.label}>Lekarz</Text>
+        <TextInput style={styles.input} defaultValue={`${visit.doctorFullName} – ${visit.doctorSpecialization}`} />
+      </>
 
       <View style={styles.buttonGroup}>
         <TouchableOpacity style={styles.saveButton}>
