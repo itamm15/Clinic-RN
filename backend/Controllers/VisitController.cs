@@ -29,6 +29,26 @@ public class VisitController : Controller
     .ToListAsync();
   }
 
+  [HttpGet("{id}")]
+  public async Task<ActionResult<VisitDto>> GetVisitById(int id)
+  {
+    return await _context.Visits
+        .Where(v => v.Id == id)
+        .Include(v => v.Doctor)
+        .ThenInclude(d => d.Specialization)
+        .Include(v => v.Patient)
+        .Select(v => new VisitDto
+        {
+          Id = v.Id,
+          VisitDate = v.VisitDate,
+          VisitReason = v.VisitReason,
+          PatientFullName = v.Patient.FirstName + " " + v.Patient.LastName,
+          DoctorFullName = v.Doctor.Name + " " + v.Doctor.LastName,
+          DoctorSpecialization = v.Doctor.Specialization.Name
+        })
+        .FirstAsync();
+  }
+
   [HttpGet("weekly-summary")]
   public async Task<ActionResult<IEnumerable<VisitSummaryDto>>> GetWeeklySummary()
   {
