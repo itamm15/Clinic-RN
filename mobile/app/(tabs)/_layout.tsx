@@ -92,6 +92,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addPatient"
+        options={{
+          title: 'Dodaj pacjenta',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
