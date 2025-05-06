@@ -80,6 +80,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="prescriptions"
+        options={{
+          title: 'Recepty',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="file-document" size={28} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
         name="events"
         options={{
           href: null
