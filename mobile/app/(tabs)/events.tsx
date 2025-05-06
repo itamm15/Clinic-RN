@@ -1,17 +1,7 @@
-import { APPOINTMENTS } from '@/constants/Appointments';
 import { useGetVisitsDailySummary } from '@/hooks/visit/useGetVisitsDailySummary';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-
-const DOCTORS = [
-  { id: 1, person: 'Dr. Krzysztof Zjadek', title: 'Kardiolog' },
-  { id: 2, person: 'Dr. Karina Wojska', title: 'Neurolog' },
-  { id: 3, person: 'Dr. Karol Poss', title: 'Ortopeda' },
-  { id: 4, person: 'Dr. Karol Wojteka', title: 'Stomatolog' },
-  { id: 5, person: 'Dr. Magdalena Kowalska', title: 'Diabetolog' },
-  { id: 6, person: 'Dr. Szymon Szczepała', title: 'Pediatra' },
-];
 
 export default function EventsScreen() {
   const { date, day } = useLocalSearchParams();
