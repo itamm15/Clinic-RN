@@ -116,6 +116,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addVisit"
+        options={{
+          title: 'Dodaj wizyte',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
