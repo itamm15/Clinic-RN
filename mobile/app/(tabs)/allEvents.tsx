@@ -17,6 +17,10 @@ export default function AllEventsScreen() {
   if (visits.length === 0) {
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.addButton} onPress={() => router.push('/addVisit')}>
+          <Text style={styles.addButtonText}>Dodaj wizyte</Text>
+        </TouchableOpacity>
+
         <Text style={styles.noVisits}>Brak dostępnych wizyt.</Text>
       </View>
     );
@@ -24,6 +28,10 @@ export default function AllEventsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.addButton} onPress={() => router.push('/addVisit')}>
+        <Text style={styles.addButtonText}>Dodaj wizyte</Text>
+      </TouchableOpacity>
+
       {visits.map((appointment) => {
         return (
           <TouchableOpacity onPress={() => router.push(`/event?id=${appointment.id}`)}>
@@ -41,6 +49,18 @@ export default function AllEventsScreen() {
 }
 
 const styles = StyleSheet.create({
+  addButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
   container: {
     padding: 16,
     paddingTop: 24,
