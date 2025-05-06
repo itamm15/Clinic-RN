@@ -88,6 +88,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="addDoctor"
         options={{
+          title: 'Dodaj lekarza',
           href: null
         }}
       />
