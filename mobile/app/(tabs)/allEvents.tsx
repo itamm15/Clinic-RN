@@ -1,8 +1,10 @@
 import { useGetVisits } from "@/hooks/visit/useGetVisits";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function AllEventsScreen() {
   const { visits, loading } = useGetVisits();
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -16,12 +18,14 @@ export default function AllEventsScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       {visits.map((appointment) => {
         return (
+          <TouchableOpacity onPress={() => router.push(`/event?id=${appointment.id}`)}>
           <View key={appointment.id} style={styles.card}>
             <Text style={styles.time}>{appointment.visitDate.toString()}</Text>
             <Text style={styles.patient}>{appointment.patientFullName}</Text>
             <Text style={styles.reason}>{appointment.visitReason}</Text>
             {<Text style={styles.doctor}>{appointment.doctorFullName} – {appointment.doctorSpecialization}</Text>}
-          </View>
+            </View>
+          </TouchableOpacity>
         );
       })}
     </ScrollView>

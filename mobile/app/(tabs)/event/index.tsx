@@ -13,12 +13,14 @@ export default function EventScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (!visit) return;
+    if (!visit?.visitDate) return;
+
+    const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
 
     navigation.setOptions({
       title: `Informacje o wizycie nr. ${visit.id}`,
       headerLeft: () => (
-        <TouchableOpacity onPress={() => router.push(`/events?date=${visit.visitDate}&day=${day}`)} style={{ paddingLeft: 16 }}>
+        <TouchableOpacity onPress={() => router.push(path)} style={{ paddingLeft: 16 }}>
           <Text style={{ fontSize: 22, color: 'black', marginRight: 8 }}>←</Text>
         </TouchableOpacity>
       ),
