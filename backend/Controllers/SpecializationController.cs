@@ -17,4 +17,13 @@ public class SpecializationController : Controller
     {
         return await _context.Specializations.ToListAsync();
     }
+
+    [HttpPost]
+    public async Task<ActionResult<bool>> AddSpecialization([FromBody] Specialization specialization)
+    {
+        _context.Specializations.Add(specialization);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
 }

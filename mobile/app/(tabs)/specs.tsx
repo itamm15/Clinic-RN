@@ -1,7 +1,7 @@
 import { useGetSpecializations } from '@/hooks/specialization/useGetSpecializations';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const specIcon = {
@@ -16,6 +16,7 @@ const specIcon = {
 export default function SpecsScreen() {
   const { specializations, loading } = useGetSpecializations();
   const navigation = useNavigation();
+  const router = useRouter();
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,6 +34,10 @@ export default function SpecsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.addButton} onPress={() => router.push('/addSpec')}>
+        <Text style={styles.addButtonText}>Dodaj specjalizacje</Text>
+      </TouchableOpacity>
+
       {specializations.length > 0 ? (
         specializations.map((spec) => (
           <View key={spec.id} style={styles.card}>
@@ -55,6 +60,18 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     backgroundColor: '#f8f9fa',
     minHeight: '100%',
+  },
+  addButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
   },
   card: {
     flexDirection: 'row',

@@ -1,18 +1,21 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function useGetSpecializations() {
   const [specializations, setSpecializations] = useState<Specialization[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    fetchSpecializations();
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      fetchSpecializations();
+    }, [])
+  );
 
   async function fetchSpecializations() {
-    const specializations = await axios.get("http://localhost:5183/api/specialization/");
-
-    setSpecializations(specializations.data);
+    setLoading(true);
+    const response = await axios.get("http://localhost:5183/api/specialization/");
+    setSpecializations(response.data);
     setLoading(false);
   }
 
