@@ -108,6 +108,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addSpec"
+        options={{
+          title: 'Dodaj specjalizacje',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
