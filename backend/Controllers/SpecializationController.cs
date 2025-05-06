@@ -26,4 +26,15 @@ public class SpecializationController : Controller
 
         return true;
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<bool>> DeleteSpecialization(int id)
+    {
+        var specialization = await _context.Specializations.FindAsync(id);
+        if (specialization == null) return true;
+
+        _context.Specializations.Remove(specialization);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

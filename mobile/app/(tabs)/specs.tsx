@@ -1,8 +1,9 @@
 import { useGetSpecializations } from '@/hooks/specialization/useGetSpecializations';
 import { useNavigation, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import axios from 'axios';
 
 const specIcon = {
   'Kardiolog': <FontAwesome5 name="heartbeat" size={32} color="#fff" />,
@@ -14,15 +15,23 @@ const specIcon = {
 };
 
 export default function SpecsScreen() {
-  const { specializations, loading } = useGetSpecializations();
+  const { specializations, loading, refetch } = useGetSpecializations();
   const navigation = useNavigation();
   const router = useRouter();
 
   useEffect(() => {
-    navigation.setOptions({
-      title: 'Specjalizacje',
-    });
+    navigation.setOptions({ title: 'Specjalizacje' });
   }, []);
+
+  const handleDelete = async (id: number) => {
+    const confirmed = confirm('Czy na pewno chcesz usunąć tę specjalizację?');
+    if (confirmed) {
+      axios.delete(`http://localhost:5183/api/specialization/${id}`).then(() => {
+        refetch();
+      });
+    }
+    return;
+  };
 
   if (loading) {
     return (
@@ -45,6 +54,9 @@ export default function SpecsScreen() {
               {specIcon[spec.name as keyof typeof specIcon]}
             </View>
             <Text style={styles.name}>{spec.name}</Text>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(spec.id)}>
+              <Feather name="trash-2" size={20} color="#fff" />
+            </TouchableOpacity>
           </View>
         ))
       ) : (
@@ -99,6 +111,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+    flex: 1,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    borderRadius: 8,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noData: {
     fontSize: 20,
