@@ -115,6 +115,24 @@ public class VisitController : Controller
     return true;
   }
 
+  [HttpPost]
+  public async Task<ActionResult<bool>> AddVisit([FromBody] VisitCreateDto dto)
+  {
+    // TODO: add validation
+    var visit = new Visit
+    {
+      VisitDate = dto.VisitDate,
+      VisitReason = dto.VisitReason,
+      PatientId = dto.PatientId,
+      DoctorId = dto.DoctorId
+    };
+
+    _context.Visits.Add(visit);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
+
   // HELPERS
 
   private string GetDayName(DayOfWeek dayOfWeek)
