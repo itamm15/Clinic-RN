@@ -25,20 +25,23 @@ export default function AddDoctorScreen() {
   }, [specializations, loading]);
 
   const handleSubmit = async () => {
-    if (!selectedSpecId) {
-      Alert.alert('Błąd', 'Wybierz specjalizację');
-      return;
+    try {
+      const response = await axios.post('http://localhost:5183/api/doctor', {
+        name: name,
+        lastName: lastName,
+        email: email,
+        specializationId: selectedSpecId,
+        dateOfBirth: new Date(dateOfBirth).toISOString(),
+      });
+
+      if (response.data === true) {
+        router.replace('/doctors');
+      } else {
+        Alert.alert('Błąd', 'Nie udało się dodać lekarza.');
+      }
+    } catch (error) {
+      Alert.alert('Błąd', 'Wystąpił problem podczas zapisu.');
     }
-
-    await axios.post('http://localhost:5183/api/doctor', {
-      name,
-      lastName,
-      email,
-      specializationId: selectedSpecId,
-      dateOfBirth: new Date(dateOfBirth).toISOString(),
-    });
-
-    router.replace('/doctors');
   };
 
   if (loading) {
