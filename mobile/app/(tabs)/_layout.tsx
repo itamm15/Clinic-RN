@@ -43,7 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Strona główna',
+          title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
@@ -60,6 +60,14 @@ export default function TabLayout() {
         options={{
           title: 'Pacjenci',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="human-cane" size={28} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="specs"
+        options={{
+          title: 'Specializacje',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="pen" size={28} color={color} />,
         }}
       />
 
