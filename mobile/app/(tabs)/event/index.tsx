@@ -3,6 +3,7 @@ import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useGetVisit } from "@/hooks/visit/useGetVisit";
+import axios from "axios";
 
 export default function EventScreen() {
   const { id, day } = useLocalSearchParams();
@@ -26,6 +27,21 @@ export default function EventScreen() {
       ),
     });
   }, [visit])
+
+  const handleDelete = async () => {
+    const confirmed = confirm('Czy na pewno chcesz usunąć tę wizytę?');
+    if (!confirmed || !visit) return;
+
+    try {
+      const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
+      await axios.delete(`http://localhost:5183/api/visit/${visit.id}`);
+
+      router.replace(path);
+    } catch (error) {
+      console.error('Błąd przy usuwaniu wizyty:', error);
+      alert('Nie udało się usunąć wizyty.');
+    }
+  };
 
   if (!visit) return <Text>Wizyta nie znaleziona</Text>;
   if (loading) return <Text>Loading...</Text>;
@@ -57,7 +73,7 @@ export default function EventScreen() {
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.buttonText}>Zapisz</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton}>
+        <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
           <Text style={styles.buttonText}>Usuń</Text>
         </TouchableOpacity>
       </View>

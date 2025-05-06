@@ -103,6 +103,18 @@ public class VisitController : Controller
     return res;
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<bool>> DeleteVisit(int id)
+  {
+    var visit = await _context.Visits.FindAsync(id);
+    if (visit == null) return true;
+
+    _context.Visits.Remove(visit);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
+
   // HELPERS
 
   private string GetDayName(DayOfWeek dayOfWeek)

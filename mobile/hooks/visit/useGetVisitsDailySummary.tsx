@@ -1,25 +1,25 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function useGetVisitsDailySummary(date: string) {
   const [visitsDailySummary, setVisitsDailySummary] = useState<VisitDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    // clear previous state
-    setVisitsDailySummary([]);
+  const fetchVisitsDailySummary = async () => {
     setLoading(true);
-
-    // refetch
-    fetchVisitsDailySummary();
-  }, [date]);
-
-  async function fetchVisitsDailySummary() {
-    const visits = await axios.get("http://localhost:5183/api/visit/daily-summary", { params: { date: date } });
-
-    setVisitsDailySummary(visits.data);
+    const response = await axios.get("http://localhost:5183/api/visit/daily-summary", {
+      params: { date },
+    });
+    setVisitsDailySummary(response.data);
     setLoading(false);
-  }
+  };
 
-  return { visitsDailySummary, loading };
+  useFocusEffect(
+    useCallback(() => {
+      fetchVisitsDailySummary();
+    }, [date])
+  );
+
+  return { visitsDailySummary, loading, refetch: fetchVisitsDailySummary };
 }
