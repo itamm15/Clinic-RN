@@ -84,6 +84,13 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addDoctor"
+        options={{
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
