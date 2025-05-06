@@ -1,9 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useGetPatients } from '@/hooks/patient/useGetPatients';
+import { useRouter } from 'expo-router';
 
 export default function PatientsScreen() {
   const { patients, loading } = useGetPatients();
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -15,6 +17,10 @@ export default function PatientsScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.addButton} onPress={() => router.push('/addDoctor')}>
+          <Text style={styles.addButtonText}>Dodaj lekarza</Text>
+      </TouchableOpacity>
+
       {patients.map((patient, index) => (
         <View key={index} style={styles.card}>
           <View style={styles.iconWrapper}>
@@ -37,6 +43,18 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     backgroundColor: '#f8f9fa',
     minHeight: '100%',
+  },
+  addButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
   },
   card: {
     flexDirection: 'row',
