@@ -1,20 +1,23 @@
+import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export function useGetPatients() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    fetchPatients();
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      const fetchPatients = async () => {
+        setLoading(true);
+        const response = await axios.get("http://localhost:5183/api/patient/");
+        setPatients(response.data);
+        setLoading(false);
+      };
 
-  async function fetchPatients() {
-    const patients = await axios.get("http://localhost:5183/api/patient/");
-
-    setPatients(patients.data);
-    setLoading(false);
-  }
+      fetchPatients();
+    }, [])
+  );
 
   return { patients, loading };
 }

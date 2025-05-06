@@ -19,4 +19,13 @@ public class PatientController : Controller
   {
     return await _context.Patients.ToListAsync();
   }
+
+  [HttpPost]
+  public async Task<ActionResult<bool>> AddPatient([FromBody] Patient patient)
+  {
+    _context.Patients.Add(patient);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
 }
