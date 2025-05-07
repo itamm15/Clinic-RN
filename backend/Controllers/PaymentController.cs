@@ -12,11 +12,29 @@ public class PaymentController : ControllerBase
     _context = context;
   }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Payment>>> GetPayments()
+  [HttpGet]
+  public async Task<ActionResult<IEnumerable<Payment>>> GetPayments()
+  {
+    return await _context.Payments
+        .Include(p => p.Patient)
+        .ToListAsync();
+  }
+
+  [HttpPost]
+  public async Task<ActionResult<bool>> AddPayment([FromBody] PaymentCreateDto dto)
+  {
+
+    var payment = new Payment
     {
-      return await _context.Payments
-          .Include(p => p.Patient)
-          .ToListAsync();
-    }
+      PaymentDate = dto.PaymentDate,
+      Amount = dto.Amount,
+      PatientId = dto.PatientId,
+      Description = dto.Description
+    };
+
+    _context.Payments.Add(payment);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
 }

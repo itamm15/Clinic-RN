@@ -42,7 +42,7 @@ export default function PaymentsScreen() {
             <Text style={styles.name}>{payment.patient.firstName} {payment.patient.lastName}</Text>
             <Text style={styles.amount}>Kwota: {payment.amount.toFixed(2)} zł</Text>
             <Text style={styles.description}>{payment.description}</Text>
-            <Text style={styles.date}>Data: {payment.paymentDate.toISOString()}</Text>
+            <Text style={styles.date}>Data: {payment.paymentDate.toString()}</Text>
           </View>
         </View>
       ))}
