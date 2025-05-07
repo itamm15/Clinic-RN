@@ -156,6 +156,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="payments"
+        options={{
+          title: 'Platności',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }

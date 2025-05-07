@@ -1,15 +1,21 @@
-// app/other.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+
+const LINKS = [
+  { label: 'Zobacz recepty', href: '/prescriptions' },
+  { label: 'Zobacz płatności', href: '/payments' },
+]
 
 export default function OtherScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/prescriptions')}>
-        <Text style={styles.buttonText}>Zobacz recepty</Text>
-      </TouchableOpacity>
+      {LINKS.map((link, index) => (
+        <TouchableOpacity key={index} style={styles.button} onPress={() => router.push(link.href)}>
+          <Text style={styles.buttonText}>{link.label}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }
@@ -29,6 +35,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#007AFF',
     padding: 16,
+    marginTop: 16,
     borderRadius: 10,
     alignItems: 'center',
   },
