@@ -196,6 +196,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="editDocument"
+        options={{
+          title: 'Edytuj dokument',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
