@@ -34,17 +34,19 @@ export default function PaymentsScreen() {
       </TouchableOpacity>
 
       {payments.map((payment, index) => (
-        <View key={index} style={styles.card}>
-          <View style={styles.iconWrapper}>
-            <FontAwesome5 name="money-bill-wave" size={24} color="#fff" />
+        <TouchableOpacity key={index} onPress={() => router.push(`/editPayment?id=${payment.id}`)}>
+          <View key={index} style={styles.card}>
+            <View style={styles.iconWrapper}>
+              <FontAwesome5 name="money-bill-wave" size={24} color="#fff" />
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.name}>{payment.patient.firstName} {payment.patient.lastName}</Text>
+              <Text style={styles.amount}>Kwota: {payment.amount.toFixed(2)} zł</Text>
+              <Text style={styles.description}>{payment.description}</Text>
+              <Text style={styles.date}>Data: {payment.paymentDate.toString()}</Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.name}>{payment.patient.firstName} {payment.patient.lastName}</Text>
-            <Text style={styles.amount}>Kwota: {payment.amount.toFixed(2)} zł</Text>
-            <Text style={styles.description}>{payment.description}</Text>
-            <Text style={styles.date}>Data: {payment.paymentDate.toString()}</Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

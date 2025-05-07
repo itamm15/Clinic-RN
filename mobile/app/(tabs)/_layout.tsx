@@ -172,6 +172,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="editPayment"
+        options={{
+          title: 'Edytuj platnośc',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }

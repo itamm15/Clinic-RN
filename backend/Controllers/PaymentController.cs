@@ -20,6 +20,14 @@ public class PaymentController : ControllerBase
         .ToListAsync();
   }
 
+  [HttpGet("{id}")]
+  public async Task<ActionResult<Payment>> GetPayment(int id)
+  {
+    return await _context.Payments
+        .Include(p => p.Patient)
+        .FirstAsync(p => p.Id == id);
+  }
+
   [HttpPost]
   public async Task<ActionResult<bool>> AddPayment([FromBody] PaymentCreateDto dto)
   {
@@ -33,6 +41,17 @@ public class PaymentController : ControllerBase
     };
 
     _context.Payments.Add(payment);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
+
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<bool>> DeletePayment(int id)
+  {
+    var payment = await _context.Payments.FindAsync(id);
+
+    _context.Payments.Remove(payment);
     await _context.SaveChangesAsync();
 
     return true;
