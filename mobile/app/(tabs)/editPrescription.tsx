@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -28,8 +28,8 @@ export default function EditPrescriptionScreen() {
       const data = res.data;
       setDescription(data.description);
       setIssuedAt(data.issuedAt.slice(0, 10));
-      setSelectedPatientId(data.patientId);
-      setSelectedDoctorId(data.doctorId);
+      setSelectedPatientId(data.patient.id);
+      setSelectedDoctorId(data.doctor.id);
     });
   }, [id]);
 
@@ -52,7 +52,16 @@ export default function EditPrescriptionScreen() {
       });
       router.replace('/prescriptions');
     } catch (error) {
-      Alert.alert('Błąd', 'Nie udało się zaktualizować recepty');
+      console.error('Błąd podczas aktualizacji:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5183/api/prescription/${id}`);
+      router.replace('/prescriptions');
+    } catch (err) {
+      console.error('Błąd podczas usuwania:', err);
     }
   };
 
@@ -106,6 +115,10 @@ export default function EditPrescriptionScreen() {
       <TouchableOpacity style={styles.button} onPress={handleUpdate}>
         <Text style={styles.buttonText}>Zapisz zmiany</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+        <Text style={styles.buttonText}>Usuń receptę</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -131,6 +144,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
   },
   buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
 });

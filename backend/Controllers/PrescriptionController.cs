@@ -55,11 +55,21 @@ public class PrescriptionController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<Prescription>> GetPrescription(int id)
   {
-      var prescription = await _context.Prescriptions
-          .Include(p => p.Patient)
-          .Include(p => p.Doctor)
-          .FirstOrDefaultAsync(p => p.Id == id);
+    var prescription = await _context.Prescriptions
+        .Include(p => p.Patient)
+        .Include(p => p.Doctor)
+        .FirstOrDefaultAsync(p => p.Id == id);
 
-      return prescription;
+    return prescription;
+  }
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeletePrescription(int id)
+  {
+      var prescription = await _context.Prescriptions.FindAsync(id);
+
+      _context.Prescriptions.Remove(prescription);
+      await _context.SaveChangesAsync();
+
+      return NoContent();
   }
 }
