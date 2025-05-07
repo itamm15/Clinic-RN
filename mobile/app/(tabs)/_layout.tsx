@@ -132,6 +132,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addPrescription"
+        options={{
+          title: 'Dodaj recepte',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
