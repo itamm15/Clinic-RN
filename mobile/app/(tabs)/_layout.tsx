@@ -164,6 +164,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addPayment"
+        options={{
+          title: 'Dodaj platnośc',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
