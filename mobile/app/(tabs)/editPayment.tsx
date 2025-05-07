@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useGetPatients } from '@/hooks/patient/useGetPatients';
 
 export default function EditPaymentScreen() {
   const { id } = useLocalSearchParams();
@@ -10,6 +12,12 @@ export default function EditPaymentScreen() {
   const [amount, setAmount] = useState('');
   const [issuedAt, setIssuedAt] = useState('');
   const [description, setDescription] = useState('');
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+
+  const [patientOpen, setPatientOpen] = useState(false);
+  const [patientItems, setPatientItems] = useState<{ label: string; value: number }[]>([]);
+
+  const { patients, loading: loadingPatients } = useGetPatients();
 
   useEffect(() => {
     axios.get(`http://localhost:5183/api/payment/${id}`).then((res) => {
@@ -17,15 +25,28 @@ export default function EditPaymentScreen() {
       setAmount(data.amount.toString());
       setIssuedAt(data.paymentDate.slice(0, 10));
       setDescription(data.description || '');
+      setSelectedPatientId(data.patient.id);
     });
   }, [id]);
+
+  useEffect(() => {
+    if (!loadingPatients) {
+      setPatientItems(
+        patients.map(p => ({
+          label: `${p.firstName} ${p.lastName}`,
+          value: p.id,
+        }))
+      );
+    }
+  }, [patients, loadingPatients]);
 
   const handleUpdate = async () => {
     try {
       await axios.put(`http://localhost:5183/api/payment/${id}`, {
         amount: parseFloat(amount),
-        issuedAt: new Date(issuedAt).toISOString(),
+        paymentDate: new Date(issuedAt).toISOString(),
         description,
+        patientId: selectedPatientId,
       });
 
       console.log('Zaktualizowano płatność');
@@ -72,6 +93,20 @@ export default function EditPaymentScreen() {
         multiline
       />
 
+      <Text style={styles.label}>Pacjent</Text>
+      <DropDownPicker
+        open={patientOpen}
+        value={selectedPatientId}
+        items={patientItems}
+        setOpen={setPatientOpen}
+        setValue={setSelectedPatientId}
+        setItems={setPatientItems}
+        placeholder="Wybierz pacjenta"
+        zIndex={1000}
+        zIndexInverse={1000}
+        style={styles.dropdown}
+      />
+
       <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
         <Text style={styles.buttonText}>Zapisz zmiany</Text>
       </TouchableOpacity>
@@ -106,6 +141,15 @@ const styles = StyleSheet.create({
   multiline: {
     height: 80,
     textAlignVertical: 'top',
+  },
+  label: {
+    fontWeight: 'bold',
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  dropdown: {
+    marginBottom: 16,
+    borderColor: '#ccc',
   },
   saveButton: {
     backgroundColor: '#007AFF',

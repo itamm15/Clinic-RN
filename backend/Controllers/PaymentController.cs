@@ -31,7 +31,6 @@ public class PaymentController : ControllerBase
   [HttpPost]
   public async Task<ActionResult<bool>> AddPayment([FromBody] PaymentCreateDto dto)
   {
-
     var payment = new Payment
     {
       PaymentDate = dto.PaymentDate,
@@ -43,6 +42,20 @@ public class PaymentController : ControllerBase
     _context.Payments.Add(payment);
     await _context.SaveChangesAsync();
 
+    return true;
+  }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult<bool>> UpdatePayment(int id, [FromBody] PaymentCreateDto updated)
+  {
+    var existing = await _context.Payments.FindAsync(id);
+
+    existing.PaymentDate = updated.PaymentDate;
+    existing.Amount = updated.Amount;
+    existing.PatientId = updated.PatientId;
+    existing.Description = updated.Description;
+
+    await _context.SaveChangesAsync();
     return true;
   }
 
