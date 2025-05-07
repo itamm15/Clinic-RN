@@ -18,6 +18,25 @@ public class DocumentController : ControllerBase
     return await _context.Documents.ToListAsync();
   }
 
+  [HttpGet("{id}")]
+  public async Task<ActionResult<Document>> GetDocument(int id)
+  {
+    return await _context.Documents.FindAsync(id);
+  }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult<bool>> UpdateDocument(int id, [FromBody] Document updated)
+  {
+      var existing = await _context.Documents.FindAsync(id);
+
+      existing.Title = updated.Title;
+      existing.Description = updated.Description;
+
+      await _context.SaveChangesAsync();
+      return true;
+  }
+
+
   [HttpPost]
   public async Task<ActionResult<bool>> AddDocument([FromBody] DocumentCreateDto document)
   {

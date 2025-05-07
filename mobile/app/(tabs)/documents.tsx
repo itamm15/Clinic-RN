@@ -34,15 +34,17 @@ export default function DocumentsScreen() {
       </TouchableOpacity>
 
       {documents.map((doc) => (
-        <View key={doc.id} style={styles.card}>
-          <View style={styles.iconWrapper}>
-            <FontAwesome5 name="file-alt" size={24} color="#fff" />
+        <TouchableOpacity key={doc.id} onPress={() => router.push(`/editDocument?id=${doc.id}`)}>
+          <View key={doc.id} style={styles.card}>
+            <View style={styles.iconWrapper}>
+              <FontAwesome5 name="file-alt" size={24} color="#fff" />
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.title}>{doc.title}</Text>
+              <Text style={styles.meta}>{new Date(doc.createdAt).toLocaleDateString()}</Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.title}>{doc.title}</Text>
-            <Text style={styles.meta}>{new Date(doc.createdAt).toLocaleDateString()}</Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
