@@ -80,9 +80,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="prescriptions"
+        name="other"
         options={{
-          title: 'Recepty',
+          title: 'Inne',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="file-document" size={28} color={color} />,
         }}
       />
@@ -134,9 +134,25 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="prescriptions"
+        options={{
+          title: 'Recepty',
+          href: null
+        }}
+      />
+
+      <Tabs.Screen
         name="addPrescription"
         options={{
           title: 'Dodaj recepte',
+          href: null
+        }}
+      />
+
+      <Tabs.Screen
+        name="editPrescription"
+        options={{
+          title: 'Edytuj recepte',
           href: null
         }}
       />
