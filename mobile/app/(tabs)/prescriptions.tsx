@@ -34,17 +34,19 @@ export default function PrescriptionsScreen() {
       </TouchableOpacity>
 
       {prescriptions.map((prescription) => (
-        <View key={prescription.id} style={styles.card}>
-          <View style={styles.iconWrapper}>
-            <FontAwesome5 name="file-prescription" size={24} color="#fff" />
+        <TouchableOpacity key={prescription.id} onPress={() => router.push(`/editPrescription?id=${prescription.id}`)}>
+          <View key={prescription.id} style={styles.card}>
+            <View style={styles.iconWrapper}>
+              <FontAwesome5 name="file-prescription" size={24} color="#fff" />
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.name}>{prescription.description}</Text>
+              <Text style={styles.reason}>Wystawiono: {new Date(prescription.issuedAt).toLocaleDateString()}</Text>
+              <Text style={styles.reason}>Pacjent: {prescription.patient.firstName} {prescription.patient.lastName}</Text>
+              <Text style={styles.reason}>Lekarz: {prescription.doctor.name} {prescription.doctor.lastName}</Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.name}>{prescription.description}</Text>
-            <Text style={styles.reason}>Wystawiono: {new Date(prescription.issuedAt).toLocaleDateString()}</Text>
-            <Text style={styles.reason}>Pacjent: {prescription.patient.firstName} {prescription.patient.lastName}</Text>
-            <Text style={styles.reason}>Lekarz: {prescription.doctor.name} {prescription.doctor.lastName}</Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

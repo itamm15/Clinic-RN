@@ -24,16 +24,42 @@ public class PrescriptionController : ControllerBase
   [HttpPost]
   public async Task<ActionResult<bool>> AddPrescription([FromBody] PrescriptionCreateDto dto)
   {
-      var prescription = new Prescription
-      {
-          IssuedAt = dto.IssuedAt,
-          Description = dto.Description,
-          PatientId = dto.PatientId,
-          DoctorId = dto.DoctorId
-      };
+    var prescription = new Prescription
+    {
+      IssuedAt = dto.IssuedAt,
+      Description = dto.Description,
+      PatientId = dto.PatientId,
+      DoctorId = dto.DoctorId
+    };
 
-      _context.Prescriptions.Add(prescription);
-      await _context.SaveChangesAsync();
-      return true;
+    _context.Prescriptions.Add(prescription);
+    await _context.SaveChangesAsync();
+    return true;
+  }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult<bool>> UpdatePrescription(int id, [FromBody] PrescriptionCreateDto updated)
+  {
+    var existing = await _context.Prescriptions.FindAsync(id);
+    if (existing == null) return NotFound();
+
+    existing.Description = updated.Description;
+    existing.IssuedAt = updated.IssuedAt;
+    existing.PatientId = updated.PatientId;
+    existing.DoctorId = updated.DoctorId;
+
+    await _context.SaveChangesAsync();
+    return true;
+  }
+
+  [HttpGet("{id}")]
+  public async Task<ActionResult<Prescription>> GetPrescription(int id)
+  {
+      var prescription = await _context.Prescriptions
+          .Include(p => p.Patient)
+          .Include(p => p.Doctor)
+          .FirstOrDefaultAsync(p => p.Id == id);
+
+      return prescription;
   }
 }
