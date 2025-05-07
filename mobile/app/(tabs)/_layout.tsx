@@ -180,6 +180,22 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="documents"
+        options={{
+          title: 'Dokumenty',
+          href: null
+        }}
+      />
+
+      <Tabs.Screen
+        name="addDocument"
+        options={{
+          title: 'Dodaj dokument',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
