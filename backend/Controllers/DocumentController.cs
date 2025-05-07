@@ -36,6 +36,16 @@ public class DocumentController : ControllerBase
       return true;
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<bool>> DeleteDocument(int id)
+  {
+      var document = await _context.Documents.FindAsync(id);
+
+      _context.Documents.Remove(document);
+      await _context.SaveChangesAsync();
+
+      return true;
+  }
 
   [HttpPost]
   public async Task<ActionResult<bool>> AddDocument([FromBody] DocumentCreateDto document)

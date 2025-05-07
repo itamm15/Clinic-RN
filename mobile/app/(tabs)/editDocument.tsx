@@ -32,6 +32,16 @@ export default function EditDocumentScreen() {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5183/api/document/${id}`);
+      console.log('Usunięto dokument');
+      router.replace('/documents');
+    } catch (error) {
+      console.log('Błąd przy usuwaniu:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Edytuj dokument</Text>
@@ -54,6 +64,11 @@ export default function EditDocumentScreen() {
       <TouchableOpacity style={styles.button} onPress={handleUpdate}>
         <Text style={styles.buttonText}>Zapisz zmiany</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+        <Text style={styles.buttonText}>Usuń dokument</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -93,5 +108,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
   },
 });
