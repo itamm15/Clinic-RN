@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
+import { PrescriptionDto } from "@/constants/types/PrescriptionDto";
 
 export function useGetPrescriptions() {
   const [prescriptions, setPrescriptions] = useState<PrescriptionDto[]>([]);
