@@ -18,7 +18,7 @@ export default function PatientsScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={() => router.push('/addPatient')}>
-          <Text style={styles.addButtonText}>Dodaj lekarza</Text>
+          <Text style={styles.addButtonText}>Dodaj pacjenta</Text>
       </TouchableOpacity>
 
       {patients.map((patient, index) => (
