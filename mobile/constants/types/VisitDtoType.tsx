@@ -5,4 +5,6 @@ type VisitDto = {
   patientFullName: string;
   doctorFullName: string;
   doctorSpecialization: string;
+  doctorId: number;
+  patientId: number;
 }

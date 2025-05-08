@@ -33,6 +33,8 @@ export default function EventScreen() {
     if (!visit) return;
 
     setVisitReason(visit.visitReason);
+    setSelectedPatientId(visit?.patientId);
+    setSelectedDoctorId(visit?.doctorId);
 
     const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
 

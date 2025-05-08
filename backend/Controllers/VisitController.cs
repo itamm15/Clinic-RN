@@ -30,21 +30,23 @@ public class VisitController : Controller
   }
 
   [HttpGet("{id}")]
-  public async Task<ActionResult<VisitDto>> GetVisitById(int id)
+  public async Task<ActionResult<VisitExtendedDto>> GetVisitById(int id)
   {
     return await _context.Visits
         .Where(v => v.Id == id)
         .Include(v => v.Doctor)
         .ThenInclude(d => d.Specialization)
         .Include(v => v.Patient)
-        .Select(v => new VisitDto
+        .Select(v => new VisitExtendedDto
         {
           Id = v.Id,
           VisitDate = v.VisitDate,
           VisitReason = v.VisitReason,
           PatientFullName = v.Patient.FirstName + " " + v.Patient.LastName,
           DoctorFullName = v.Doctor.Name + " " + v.Doctor.LastName,
-          DoctorSpecialization = v.Doctor.Specialization.Name
+          DoctorSpecialization = v.Doctor.Specialization.Name,
+          DoctorId = v.DoctorId,
+          PatientId = v.PatientId
         })
         .FirstAsync();
   }
@@ -168,4 +170,16 @@ public class VisitSummaryDto {
     public string VisitDate { get; set; }
     public string Day { get; set; }
     public int VisitCount { get; set; }
+}
+
+public class VisitExtendedDto {
+  public int Id { get; set; }
+  public DateTime VisitDate { get; set; }
+  public string VisitReason { get; set; }
+
+  public string PatientFullName { get; set; }
+  public string DoctorFullName { get; set; }
+  public string DoctorSpecialization { get; set; }
+  public int DoctorId { get; set; }
+  public int PatientId { get; set; }
 }
