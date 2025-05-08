@@ -22,18 +22,20 @@ export default function DoctorsScreen() {
       </TouchableOpacity>
 
       {doctors.map((doctor) => (
-        <View key={doctor.id} style={styles.card}>
-          <View style={styles.iconWrapper}>
-            {specIcon[doctor.specialization.name as keyof typeof specIcon]}
+        <TouchableOpacity key={doctor.id} onPress={() => router.push(`/editDoctor?id=${doctor.id}`)}>
+          <View key={doctor.id} style={styles.card}>
+            <View style={styles.iconWrapper}>
+              {specIcon[doctor.specialization.name as keyof typeof specIcon]}
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.person}>Dr. {doctor.name} {doctor.lastName}</Text>
+              <Text style={styles.title}>{doctor.specialization.name}</Text>
+              <Text style={styles.availability}>
+                Kontakt: {doctor.email}
+              </Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.person}>Dr. {doctor.name} {doctor.lastName}</Text>
-            <Text style={styles.title}>{doctor.specialization.name}</Text>
-            <Text style={styles.availability}>
-              Kontakt: {doctor.email}
-            </Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

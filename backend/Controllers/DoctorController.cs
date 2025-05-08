@@ -20,6 +20,27 @@ public class DoctorController : Controller
     return await _context.Doctors.Include(d => d.Specialization).ToListAsync();
   }
 
+  [HttpGet("{id}")]
+  public async Task<ActionResult<Doctor>> GetDoctor(int id)
+  {
+    return await _context.Doctors.Include(d => d.Specialization).FirstAsync(d => d.Id == id);
+  }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult<bool>> UpdateDoctor(int id, [FromBody] DoctorCreateDto updatedDoctor)
+  {
+    var existing = await _context.Doctors.FindAsync(id);
+
+    existing.Name = updatedDoctor.Name;
+    existing.LastName = updatedDoctor.LastName;
+    existing.Email = updatedDoctor.Email;
+    existing.SpecializationId = updatedDoctor.SpecializationId;
+
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
+
   [HttpPost]
   public async Task<ActionResult<bool>> AddDoctor([FromBody] DoctorCreateDto dto)
   {
