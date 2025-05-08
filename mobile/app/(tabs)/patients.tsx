@@ -22,16 +22,18 @@ export default function PatientsScreen() {
       </TouchableOpacity>
 
       {patients.map((patient, index) => (
-        <View key={index} style={styles.card}>
-          <View style={styles.iconWrapper}>
-            <FontAwesome5 name="user" size={24} color="#fff" />
+        <TouchableOpacity key={index} onPress={() => router.push(`/editPatient?id=${patient.id}`)}>
+          <View key={index} style={styles.card}>
+            <View style={styles.iconWrapper}>
+              <FontAwesome5 name="user" size={24} color="#fff" />
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.name}>{patient.firstName} {patient.lastName}</Text>
+              <Text style={styles.reason}>Kontakt: {patient.phoneNumber}</Text>
+              <Text style={styles.reason}>Email: {patient.email}</Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.name}>{patient.firstName} {patient.lastName}</Text>
-            <Text style={styles.reason}>Kontakt: {patient.phoneNumber}</Text>
-            <Text style={styles.reason}>Email: {patient.email}</Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

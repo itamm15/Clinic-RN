@@ -20,6 +20,12 @@ public class PatientController : Controller
     return await _context.Patients.ToListAsync();
   }
 
+  [HttpGet("{id}")]
+  public async Task<ActionResult<Patient>> GetPatient(int id)
+  {
+    return await _context.Patients.FindAsync(id);
+  }
+
   [HttpPost]
   public async Task<ActionResult<bool>> AddPatient([FromBody] Patient patient)
   {

@@ -212,6 +212,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="editPatient"
+        options={{
+          title: 'Edytuj pacjenta',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
