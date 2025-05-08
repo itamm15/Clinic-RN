@@ -35,12 +35,17 @@ export default function EditDoctorScreen() {
 
   const handleUpdate = async () => {
     await axios.put(`http://localhost:5183/api/doctor/${id}`, {
-      name: name,
-      lastName: lastName,
-      email: email,
+      name,
+      lastName,
+      email,
       specializationId: selectedSpecId
     });
 
+    router.replace('/doctors');
+  };
+
+  const handleDelete = async () => {
+    await axios.delete(`http://localhost:5183/api/doctor/${id}`);
     router.replace('/doctors');
   };
 
@@ -69,6 +74,10 @@ export default function EditDoctorScreen() {
       <TouchableOpacity style={styles.button} onPress={handleUpdate}>
         <Text style={styles.buttonText}>Zapisz</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+        <Text style={styles.buttonText}>Usuń</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -93,6 +102,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12
   },
   buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 }
 });

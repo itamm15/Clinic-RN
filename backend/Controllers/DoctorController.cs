@@ -41,6 +41,17 @@ public class DoctorController : Controller
     return true;
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<bool>> DeleteDoctor(int id)
+  {
+      var doctor = await _context.Doctors.FindAsync(id);
+
+      _context.Doctors.Remove(doctor);
+      await _context.SaveChangesAsync();
+
+      return true;
+  }
+
   [HttpPost]
   public async Task<ActionResult<bool>> AddDoctor([FromBody] DoctorCreateDto dto)
   {
