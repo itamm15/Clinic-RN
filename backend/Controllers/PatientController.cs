@@ -34,4 +34,15 @@ public class PatientController : Controller
 
     return true;
   }
+
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<bool>> DeletePatient(int id)
+  {
+    var patient = await _context.Patients.FindAsync(id);
+
+    _context.Patients.Remove(patient);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
 }
