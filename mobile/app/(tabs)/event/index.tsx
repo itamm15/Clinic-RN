@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useGetVisit } from "@/hooks/visit/useGetVisit";
+import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
+import { useGetVisit } from "@/hooks/visit/useGetVisit";
+import { useGetPatients } from "@/hooks/patient/useGetPatients";
+import { useGetDoctors } from "@/hooks/doctor/useGetDoctors";
 
 export default function EventScreen() {
   const { id, day } = useLocalSearchParams();
   const { visit, loading } = useGetVisit(parseInt(id as string));
-  const time = new Date().toTimeString().slice(0, 5);
-
   const router = useRouter();
   const navigation = useNavigation();
 
+  const [visitReason, setVisitReason] = useState('');
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<number | null>(null);
+  const [patientItems, setPatientItems] = useState<{ label: string; value: number }[]>([]);
+  const [doctorItems, setDoctorItems] = useState<{ label: string; value: number }[]>([]);
+  const [patientOpen, setPatientOpen] = useState(false);
+  const [doctorOpen, setDoctorOpen] = useState(false);
+
+  const { patients } = useGetPatients();
+  const { doctors } = useGetDoctors();
+
   useEffect(() => {
-    if (!visit?.visitDate) return;
+    setPatientItems(patients.map(p => ({ label: `${p.firstName} ${p.lastName}`, value: p.id })));
+    setDoctorItems(doctors.map(d => ({ label: `Dr. ${d.name} ${d.lastName}`, value: d.id })));
+  }, [patients, doctors]);
+
+  useEffect(() => {
+    if (!visit) return;
+
+    setVisitReason(visit.visitReason);
 
     const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
 
@@ -26,51 +44,88 @@ export default function EventScreen() {
         </TouchableOpacity>
       ),
     });
-  }, [visit])
+  }, [visit]);
+
+  const handleUpdate = async () => {
+    if (!visit) return;
+
+    try {
+      await axios.put(`http://localhost:5183/api/visit/${visit.id}`, {
+        visitDate: visit.visitDate,
+        visitReason,
+        patientId: selectedPatientId,
+        doctorId: selectedDoctorId,
+      });
+
+      console.log("Zaktualizowano wizytę");
+
+      const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
+      router.replace(path);
+    } catch (error) {
+      console.error("Błąd przy aktualizacji:", error);
+    }
+  };
 
   const handleDelete = async () => {
-    const confirmed = confirm('Czy na pewno chcesz usunąć tę wizytę?');
-    if (!confirmed || !visit) return;
+    if (!visit) return;
+    const confirmed = confirm("Czy na pewno chcesz usunąć tę wizytę?");
+    if (!confirmed) return;
 
     try {
       const path = day ? `/events?date=${visit.visitDate}&day=${day}` : `/allEvents`;
       await axios.delete(`http://localhost:5183/api/visit/${visit.id}`);
-
       router.replace(path);
     } catch (error) {
-      console.error('Błąd przy usuwaniu wizyty:', error);
-      alert('Nie udało się usunąć wizyty.');
+      console.error("Błąd przy usuwaniu wizyty:", error);
     }
   };
 
   if (!visit) return <Text>Wizyta nie znaleziona</Text>;
-  if (loading) return <Text>Loading...</Text>;
+  if (loading) return <Text>Ładowanie...</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>Data wizyty</Text>
-      <TextInput style={styles.input} defaultValue={visit.visitDate.toString()} editable={false} />
-
-      <Text style={styles.label}>Godzina</Text>
-      <TextInput style={styles.input} defaultValue={time} />
-
-      <Text style={styles.label}>Pacjent</Text>
-      <TextInput style={styles.input} defaultValue={visit.patientFullName} />
+      <TextInput style={styles.input} value={visit.visitDate.toString()} editable={false} />
 
       <Text style={styles.label}>Powód wizyty</Text>
       <TextInput
         style={[styles.input, styles.multiline]}
-        defaultValue={visit.visitReason}
+        value={visitReason}
+        onChangeText={setVisitReason}
         multiline
       />
 
-      <>
-        <Text style={styles.label}>Lekarz</Text>
-        <TextInput style={styles.input} defaultValue={`${visit.doctorFullName} – ${visit.doctorSpecialization}`} />
-      </>
+      <Text style={styles.label}>Pacjent</Text>
+      <DropDownPicker
+        open={patientOpen}
+        value={selectedPatientId}
+        items={patientItems}
+        setOpen={setPatientOpen}
+        setValue={setSelectedPatientId}
+        setItems={setPatientItems}
+        placeholder="Wybierz pacjenta"
+        zIndex={2000}
+        zIndexInverse={2000}
+        style={styles.dropdown}
+      />
+
+      <Text style={styles.label}>Lekarz</Text>
+      <DropDownPicker
+        open={doctorOpen}
+        value={selectedDoctorId}
+        items={doctorItems}
+        setOpen={setDoctorOpen}
+        setValue={setSelectedDoctorId}
+        setItems={setDoctorItems}
+        placeholder="Wybierz lekarza"
+        zIndex={1000}
+        zIndexInverse={1000}
+        style={styles.dropdown}
+      />
 
       <View style={styles.buttonGroup}>
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
           <Text style={styles.buttonText}>Zapisz</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
@@ -82,17 +137,8 @@ export default function EventScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 24,
-    backgroundColor: '#f8f9fa',
-    gap: 16,
-    minHeight: '100%',
-  },
-  label: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: '#333',
-  },
+  container: { padding: 24, backgroundColor: '#f8f9fa', gap: 16, minHeight: '100%' },
+  label: { fontWeight: 'bold', fontSize: 15, color: '#333' },
   input: {
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -101,32 +147,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
-  multiline: {
-    height: 80,
-    textAlignVertical: 'top',
-  },
-  buttonGroup: {
-    flexDirection: 'column',
-    gap: 12,
-    marginTop: 32,
-  },
+  multiline: { height: 80, textAlignVertical: 'top' },
+  dropdown: { marginBottom: 12, borderColor: '#ccc' },
+  buttonGroup: { flexDirection: 'column', gap: 12, marginTop: 32 },
   saveButton: {
-    flex: 1,
     backgroundColor: '#007AFF',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
   },
   deleteButton: {
-    flex: 1,
     backgroundColor: '#FF3B30',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-  },
+  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
 });

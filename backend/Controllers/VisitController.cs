@@ -133,6 +133,20 @@ public class VisitController : Controller
     return true;
   }
 
+  [HttpPut("{id}")]
+  public async Task<IActionResult> UpdateVisit(int id, [FromBody] VisitCreateDto updatedVisit)
+  {
+      var visit = await _context.Visits.FindAsync(id);
+
+      visit.VisitDate = updatedVisit.VisitDate;
+      visit.VisitReason = updatedVisit.VisitReason;
+      visit.PatientId = updatedVisit.PatientId;
+      visit.DoctorId = updatedVisit.DoctorId;
+
+      await _context.SaveChangesAsync();
+      return NoContent();
+  }
+
   // HELPERS
 
   private string GetDayName(DayOfWeek dayOfWeek)
