@@ -228,6 +228,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="addExamination"
+        options={{
+          title: 'Dodaj badanie',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }

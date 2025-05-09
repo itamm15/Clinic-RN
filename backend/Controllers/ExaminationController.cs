@@ -15,6 +15,28 @@ public class ExaminationController : ControllerBase
   [HttpGet]
   public async Task<ActionResult<IEnumerable<MedExamination>>> GetExaminations()
   {
-    return await _context.MedExaminations.ToListAsync();
+    return await _context.MedExaminations.Include(x => x.Doctor).ToListAsync();
   }
+
+  [HttpPost]
+  public async Task<ActionResult<bool>> AddExamination([FromBody] MedExaminationCreateDto examination)
+  {
+      var medExamination = new MedExamination
+      {
+          Name = examination.Name,
+          Description = examination.Description,
+          DoctorId = examination.DoctorId
+      };
+
+      _context.MedExaminations.Add(medExamination);
+      await _context.SaveChangesAsync();
+      return true;
+  }
+}
+
+public class MedExaminationCreateDto
+{
+  public string Name { get; set; }
+  public string Description { get; set; }
+  public int DoctorId { get; set; }
 }
