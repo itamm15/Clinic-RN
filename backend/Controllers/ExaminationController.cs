@@ -13,8 +13,8 @@ public class ExaminationController : ControllerBase
   }
 
   [HttpGet]
-  public async Task<ActionResult<IEnumerable<Examination>>> GetExaminations()
+  public async Task<ActionResult<IEnumerable<MedExamination>>> GetExaminations()
   {
-    return await _context.Examinations.ToListAsync();
+    return await _context.MedExaminations.ToListAsync();
   }
 }

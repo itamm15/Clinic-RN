@@ -9,6 +9,6 @@ public class AppDbContext : DbContext
   public DbSet<Prescription> Prescriptions { get; set; }
   public DbSet<Payment> Payments { get; set; }
   public DbSet<Document> Documents { get; set; }
-  public DbSet<Examination> Examinations { get; set; }
+  public DbSet<MedExamination> MedExaminations { get; set; }
   public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 }
