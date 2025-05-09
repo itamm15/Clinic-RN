@@ -5,6 +5,7 @@ const LINKS = [
   { label: 'Zobacz recepty', href: '/prescriptions' },
   { label: 'Zobacz płatności', href: '/payments' },
   { label: 'Zobacz dokumenty', href: '/documents' },
+  { label: 'Zobacz badania', href: '/examinations' },
 ]
 
 export default function OtherScreen() {
