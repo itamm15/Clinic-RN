@@ -220,6 +220,14 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="examinations"
+        options={{
+          title: 'Badania',
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
