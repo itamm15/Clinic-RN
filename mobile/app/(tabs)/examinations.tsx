@@ -39,7 +39,7 @@ export default function ExaminationsScreen() {
           </View>
           <View style={styles.info}>
             <Text style={styles.title}>{exam.name}</Text>
-            <Text style={styles.meta}>Lekarz: {exam.doctorName}</Text>
+            <Text style={styles.meta}>Lekarz: {exam.doctor.name} {exam.doctor.lastName}</Text>
             <Text style={styles.meta}>Opis: {exam.description}</Text>
           </View>
         </View>
