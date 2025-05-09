@@ -45,4 +45,20 @@ public class PatientController : Controller
 
     return true;
   }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult<bool>> UpdatePatient(int id, [FromBody] Patient updated)
+  {
+    var existing = await _context.Patients.FindAsync(id);
+
+    existing.FirstName = updated.FirstName;
+    existing.LastName = updated.LastName;
+    existing.Email = updated.Email;
+    existing.DateOfBirth = updated.DateOfBirth;
+    existing.PhoneNumber = updated.PhoneNumber;
+    existing.Address = updated.Address;
+
+    await _context.SaveChangesAsync();
+    return true;
+  }
 }

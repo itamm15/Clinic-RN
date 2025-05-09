@@ -12,6 +12,7 @@ export default function EditPatientScreen() {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     axios.get(`http://localhost:5183/api/patient/${id}`).then(res => {
@@ -19,10 +20,29 @@ export default function EditPatientScreen() {
       setFirstName(patient.firstName);
       setLastName(patient.lastName);
       setEmail(patient.email);
+      setAddress(patient.address);
       setPhoneNumber(patient.phoneNumber.toString());
       setDateOfBirth(patient.dateOfBirth.slice(0, 10));
     });
   }, [id]);
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(`http://localhost:5183/api/patient/${id}`, {
+        firstName,
+        lastName,
+        email,
+        address,
+        phoneNumber: phoneNumber,
+        dateOfBirth: new Date(dateOfBirth).toISOString()
+      });
+
+      console.log('Zaktualizowano pacjenta');
+      router.replace('/patients');
+    } catch (error) {
+      console.error('Błąd przy aktualizacji pacjenta:', error);
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -54,6 +74,13 @@ export default function EditPatientScreen() {
 
       <TextInput
         style={styles.input}
+        placeholder="Adres"
+        value={address}
+        onChangeText={setAddress}
+      />
+
+      <TextInput
+        style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -74,6 +101,10 @@ export default function EditPatientScreen() {
         value={dateOfBirth}
         onChangeText={setDateOfBirth}
       />
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
+        <Text style={styles.buttonText}>Zapisz zmiany</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
         <Text style={styles.buttonText}>Usuń pacjenta</Text>
@@ -103,12 +134,19 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     marginBottom: 12,
   },
+  saveButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
+  },
   deleteButton: {
     backgroundColor: '#FF3B30',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 12,
   },
   buttonText: {
     color: '#fff',
